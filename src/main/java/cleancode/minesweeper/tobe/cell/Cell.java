@@ -1,38 +1,21 @@
 package cleancode.minesweeper.tobe.cell;
 
-// 객체를 만들 때 getter, setter은 바로 만들지 않고 필요한 순간에만 만드는 편이 좋음
-// 특히 setter는 만들지 않는게 좋음 -> 객체의 불변성 보존
-public abstract class Cell {
+// 상속 구조는 결합도가 높은 구조다 하위 모듈이 상위 모듈을 참조하는 형태라서 결합도가 높은 상태이다, 캡슐화도 깨진상태(부모의 값을 알고 있으닌깐)
+// 부모의 변경도 자식들에게 영향이 감
+// 그래서 인터페이스 구현(조합)시 구조 유연도가 높아짐
+public interface Cell {
 
-    // 매직 넘버, 매직 스트링
-    // - 의미를 갖고 있으나, 상수로 추출되지 않은 숫자, 문자열 등
-    // - 상수 추출로 이름을 짓고 의미를 부여함으로써 가독성, 유지보수성 업
-    protected static final String FLAG_SIGN = "⚑";
+    boolean isLandMine();
 
-    protected static final String UNCHECKED_SIGN = "□";
+    boolean hasLandMineCount();
 
-    protected boolean isFlagged;
-    protected boolean isOpened;
+    CellSnapshot getSnapshot();
 
-    public void flag() {
-        this.isFlagged = true;
-    }
+    void flag();
 
-    public void open() {
-        this.isOpened = true;
-    }
+    void open();
 
-    public boolean isChecked() {
-        return isFlagged || isOpened;
-    }
+    boolean isChecked();
 
-    public abstract boolean isLandMine();
-
-    public boolean isOpened() {
-        return isOpened;
-    }
-
-    public abstract boolean hasLandMineCount();
-
-    public abstract String getSign();
+    boolean isOpened();
 }

@@ -1,4 +1,4 @@
-package cleancode.minesweeper.tobe.gameLevel;
+package cleancode.minesweeper.tobe.gamelevel;
 
 public interface GameLevel {
 
