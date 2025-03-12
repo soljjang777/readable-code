@@ -3,6 +3,7 @@ package cleancode.studycafe.tobe;
 import cleancode.studycafe.tobe.exception.AppException;
 import cleancode.studycafe.tobe.io.StudyCafeFileHandler;
 import cleancode.studycafe.tobe.io.StudyCafeIOHandler;
+import cleancode.studycafe.tobe.model.order.StudyCafePassOder;
 import cleancode.studycafe.tobe.model.pass.StudyCafePassType;
 import cleancode.studycafe.tobe.model.pass.StudyCafePasses;
 import cleancode.studycafe.tobe.model.pass.StudyCafeSeatPass;
@@ -26,17 +27,17 @@ public class StudyCafePassMachine {
             StudyCafeSeatPass selectedPass = selectPass();
 
             Optional<StudyCafeLockerPass> optionalLockerPass = selectLockerPass(selectedPass);
+            StudyCafePassOder passOrder = StudyCafePassOder.of(
+                    selectedPass,
+                    optionalLockerPass.orElse(null)
+            );
 
             // * 파라미터로 Optional을 전달하는건 안티패턴
             // Optional<StudyCafeLockerPass>을 파라미터로 전달해서 받는 메소드 입장에서는
             // Optional이 null일 수도 있고
             // Optional안에 있는 StudyCafeLockerPass이 null일 수도 있고 아닐 수도 있는
             // 모든 케이스를 검사해야됨
-
-            optionalLockerPass.ifPresentOrElse(
-                    lockerPass -> iOHandler.showPassOrderSummary(selectedPass, lockerPass),
-                    () -> iOHandler.showPassOrderSummary(selectedPass)
-            );
+            iOHandler.showPassOrderSummary(passOrder);
 
         } catch (AppException e) {
             iOHandler.showSimpleMessage(e.getMessage());
