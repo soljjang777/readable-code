@@ -59,14 +59,19 @@ public class StudyCafePassMachine {
         List<StudyCafePass> allPasses = studyCafeFileHandler.readStudyCafePasses();
 
         return allPasses.stream()
-                .filter(studyCafePass -> studyCafePass.getPassType() == studyCafePassType)
+                // studyCafePass.getPassType() == studyCafePassType 으로 객체에게 데이터를 강탈하지말고
+                // 조회 메서드를 만들어서 메세지로 물어보자!
+                .filter(studyCafePass -> studyCafePass.isSamePassType(studyCafePassType))
                 .toList();
     }
 
     // Optional을 사용함으로서 null이 있을 수도 있고 없을 수도 있어라는 명시 -> NPE 방지
     private Optional<StudyCafeLockerPass> selectLockerPass(StudyCafePass selectedPass) {
-        // 스터디 카페 이용권 타입이 고정이 아니면 null 반환
-        if (selectedPass.getPassType() != StudyCafePassType.FIXED) {
+        // 고정 좌석 타입이 아닌가? -> 낮은 추상화 레벨 -> doesNotFixedType()
+        // 사물함 옵션을 사용할 수 있는 타입이 아닌가?
+        //  -> 사용자가 고른 이용권이 사물함 옵션을 사용할 수 있는지 없는지가 더 맞는 관심사
+        //  -> 높은 추상화 레벨 -> cannotUseLocker()
+        if (selectedPass.cannotUseLocker()) {
             return Optional.empty();
         }
 
@@ -88,14 +93,11 @@ public class StudyCafePassMachine {
         return Optional.empty();
     }
 
-    private StudyCafeLockerPass findLockerPassCandidateBy(StudyCafePass selectedPass) {
+    private StudyCafeLockerPass findLockerPassCandidateBy(StudyCafePass pass) {
         List<StudyCafeLockerPass> allLockerPasses = studyCafeFileHandler.readLockerPasses();
 
         return allLockerPasses.stream()
-            .filter(lockerPass ->
-                lockerPass.getPassType() == selectedPass.getPassType()
-                    && lockerPass.getDuration() == selectedPass.getDuration()
-            )
+            .filter(pass::isSameDurationType)
             .findFirst()
             .orElse(null);
     }
