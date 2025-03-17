@@ -6,11 +6,13 @@ import cleancode.studycafe.tobe.model.pass.StudyCafeSeatPass;
 import cleancode.studycafe.tobe.model.pass.StudyCafePassType;
 
 import java.util.List;
+import java.util.Scanner;
+
 // Input, Output은 같이 움직임으로 일련의 객체로 만들어서 사용
 // 사용자와의 인터렉션을 객체하나로 통합
 public class StudyCafeIOHandler {
 
-    private final InputHandler inputHandler = new InputHandler();
+    private final InputHandler inputHandler = new InputHandler(new Scanner(System.in));
     private final OutputHandler outputHandler = new OutputHandler();
     public void showWelcomeMessage() {
         outputHandler.showWelcomeMessage();

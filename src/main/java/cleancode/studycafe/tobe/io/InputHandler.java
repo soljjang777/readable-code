@@ -9,10 +9,14 @@ import java.util.Scanner;
 
 public class InputHandler {
 
-    private static final Scanner SCANNER = new Scanner(System.in);
+    private final Scanner scanner;  // Scanner를 주입받도록 변경
+
+    public InputHandler(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
     public StudyCafePassType getPassTypeSelectingUserAction() {
-        String userInput = SCANNER.nextLine();
+        String userInput = scanner.nextLine();
 
         if ("1".equals(userInput)) {
             return StudyCafePassType.HOURLY;
@@ -27,13 +31,13 @@ public class InputHandler {
     }
 
     public StudyCafeSeatPass getSelectPass(List<StudyCafeSeatPass> passes) {
-        String userInput = SCANNER.nextLine();
+        String userInput = scanner.nextLine();
         int selectedIndex = Integer.parseInt(userInput) - 1;
         return passes.get(selectedIndex);
     }
 
     public boolean getLockerSelection() {
-        String userInput = SCANNER.nextLine();
+        String userInput = scanner.nextLine();
         return "1".equals(userInput);
     }
 
